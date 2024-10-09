@@ -1,27 +1,34 @@
 import React, { useState, useEffect } from "react";
-import Data from "../data/db.json";
+import {listDecks} from "../utils/api";
 //import Deck from "./Deck";
 
 import { Outlet } from "react-router-dom";
 
 function DeckList() {
-    const [ flashDecks, setFlashDecks ] = useState({});
+    const [ flashDecks, setFlashDecks ] = useState([]);
     
     //FETCH decks/cards
        useEffect (() => {
-        fetch("/data/db.json")
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        listDecks(signal)
             .then(response =>
                 response.json())
-            .then(data =>
-                setFlashDecks(data));
+            .then(data => {
+                console.log(JSON.stringify(data));
+                setFlashDecks(data);
+            })
+            .catch((error) => console.error("Failed to fetch decks:", error));
+
+    return () => abortController.abort();    
         }, []);
     
-    console.log("../data/db.json");
-        
     return (
     
         <div>
             <h1>The Deck</h1>
+            <p>{flashDecks.length}</p>
             <ul>
             
         </ul>
