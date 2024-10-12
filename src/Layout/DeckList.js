@@ -1,39 +1,52 @@
 import React, { useState, useEffect } from "react";
 import {listDecks} from "../utils/api";
-//import Deck from "./Deck";
+import Deck from "./Deck";
 
-import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function DeckList() {
     const [ flashDecks, setFlashDecks ] = useState([]);
-    
-    //FETCH decks/cards
-       useEffect (() => {
+    const navigate = useNavigate();
+
+    // Fetch decks on component mount
+    useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
 
-        listDecks(signal)
-            .then(response =>
-                response.json())
-            .then(data => {
-                console.log(JSON.stringify(data));
-                setFlashDecks(data);
-            })
-            .catch((error) => console.error("Failed to fetch decks:", error));
+        const fetchDecks = async () => {
+            try {
+                const decks = await listDecks(signal);
+                setFlashDecks(decks);
+            } catch (error) {
+                console.error("Failed to fetch decks:", error);
+            }
+        };
 
-    return () => abortController.abort();    
-        }, []);
+        fetchDecks();
+        
+        return () => abortController.abort();
+    }, []);
+    
+    // Handler to navigate to the Create Deck page
+    const handleCreateDeck = () => {
+        navigate("/decks/new");
+    };
+
     
     return (
-    
         <div>
-            <h1>The Deck</h1>
-            <p>{flashDecks.length}</p>
-            <ul>
+            <button type="button" onClick={handleCreateDeck}>
+                + Create Deck
+            </button>
+            <div>
             
-        </ul>
-        
-        <Outlet/>
+                {flashDecks.map((deck) => (
+                    <section className="m-5" key={deck.id}>
+                        <Deck deck={deck} />
+                    </section>
+                ))}
+            </div>
+
         </div>
     );
 }

@@ -12,9 +12,9 @@ function Layout() {
       <div className="container">
         {/* TODO: Implement the screen starting here */}
                 
-        <button type="buttom">+ Create Deck</button>
+       
         <RootRoutes />
-        <NotFound />
+        {/*<NotFound />*/}
       </div>
     </>
   );
