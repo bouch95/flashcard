@@ -25,7 +25,7 @@ function CreateDeck() {
 
     return (
         <div>
-            <nav className="breadcrumb"><Link to="/">Home</Link>Create Deck</nav>
+            <nav className="breadcrumb"><Link to="/">Home </Link>/ Create Deck</nav>
             <h2>Create Deck</h2>
             <form onSubmit={handleSubmit}>
                 <div>
