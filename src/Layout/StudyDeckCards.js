@@ -27,22 +27,24 @@ function StudyDeckCards() {
 
         fetchDecks();
         
-        console.log("where's the hook");
-        console.log(deckId);
         console.log(selectedDeck);
         
         // Cleanup function to abort fetch on component unmount
         return () => abortController.abort();
     }, [deckId]); // Effect runs everytime 'deckId' changes    
     
-    if (!selectedDeck) {
+    if (!selectedDeck || !selectedDeck.cards) {
         return <p>Loading...</p>;
     }
+
+    const { cards } = selectedDeck;
     
     console.log(selectedDeck);
     
     // If the deck has fewer than 2 cards, prompt the user to add more
-    //if (!selectedDeck || selectedDeck.cards.length < 2) {
+    if (cards.length < 4) {
+        console.log("number of cards = ", cards.length);
+    
     return (
         <div>
             {/* Breadcrumb navigation */}
@@ -58,7 +60,7 @@ function StudyDeckCards() {
             <div className="deck p-4 border">
                 <h3>Not enough cards.</h3>
                 <p>You need to have at least 3 cards to study.</p>
-                <p>{`There are ${selectedDeck} cards in this deck.`}</p>
+                <p>{`There are ${cards.length} cards in this deck.`}</p>
             
                 {/* Button to navigate to add new cards */}
                 <Link to={`/decks/${deckId}/cards/new`}>
@@ -69,38 +71,28 @@ function StudyDeckCards() {
             </div>
         </div>
     );
-/*
-    let side = "front";
+} else {
+    let i = 1;
     return (
         <div>
-            
             <nav className="breadcrumb"><Link to="/">Home</Link>{` / ${selectedDeck.name} / Study`}</nav>
             <h2>{`${selectedDeck.name}: Study`}</h2>
-            
-                {selectedDeck.cards.map((card) => (
+                {cards.map((card) => (
                     <div className="deck p-4 border">
-                    <h3>{`Card ${card} of ${selectedDeck.cards.length}`}</h3>
-                    <p>{card.side}</p>
-                    <button type="button" className="btn btn-secondary border" onClick={() => 
-                        {if (side === "front") {
-                            side = "back";
-                        } else {
-                            side = "front";
-                        }
-                }}>
+                    <h3>{`Card ${i++} of ${cards.length}`}</h3>
+                    <p>{card.front}</p>
+                    <button type="button" className="btn btn-secondary border" 
+                        onClick={() => 
+                            <p>{card.back}</p>
+                        }>
                         Flip
                     </button>    
                     </div>
                 ))}
-           
-
-
-            <p>This is a placeholder for the component.</p>
-            <p></p>
-           
         </div>
     );
-*/
+
     }
+}
 
 export default StudyDeckCards;
