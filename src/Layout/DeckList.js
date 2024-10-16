@@ -35,7 +35,7 @@ function DeckList() {
     
     return (
         <div>
-            <button type="button" onClick={handleCreateDeck}>
+            <button className="btn btn-secondary" type="button" onClick={handleCreateDeck}>
                 + Create Deck
             </button>
             <div>

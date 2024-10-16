@@ -22,13 +22,13 @@ function Deck({ deck }) {
             
             <div>
                 <Link to={`/decks/${deck.id}`}>
-                    <button type="button">View</button>
+                    <button className="btn btn-secondary border" type="button">View</button>
                 </Link>
                 <Link to={`/decks/${deck.id}/study`}>
-                    <button type="button">Study</button>
+                    <button className="btn btn-secondary border" type="button">Study</button>
                 </Link>
                 <Link>
-                    <button type="button" onClick={() => 
+                    <button className="btn btn-secondary border" type="button" onClick={() => 
                         {if (window.confirm("Delete this deck? You will not be able to recover it.")) {
                             deleteDeck(deck.id, signal);
                             navigate("/");
