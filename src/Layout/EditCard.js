@@ -12,6 +12,7 @@ function EditCard() {
     const [cardBack, setCardBack] = useState("");
     const navigate = useNavigate();
 
+
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
@@ -31,14 +32,15 @@ function EditCard() {
             try { 
                 const fetchedCard = await readCard(cardId, signal);
                 setCard(fetchedCard);
+                //setCardFront(card.front);
+                //console.log(cardFront);
             } catch (error) {
                 console.error("Failed to fetch the card:", error);
-
             } 
         ;}
         
         fetchCard();
-        
+
         return () => abortController.abort();
     }, [deckId, cardId]);
 
@@ -46,29 +48,36 @@ function EditCard() {
     if (!deck || !card) {
         return <p>Loading...</p>;
     }
-
+        //console.log(cardFront, "test");
+        //console.log(card.front);
+        //setCardFront(card.front);
+        
+    
     // Corrected navigation path after creating a card
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+        
+        
+        
         const updatedCard = {
+            
+            id: Number(cardId),
             front: cardFront,
             back: cardBack,
             deckId: Number(deckId)
         };
-
+            console.log(updatedCard);
         try {
             await updateCard(updatedCard);
-            setCardFront("");
-            setCardBack("");
+            //setCardFront(card.front);
+            //setCardBack("");
         } catch (error) {
             console.error("Failed to update card:", error);
         }
+        navigate(`/decks/${deckId}`);
     };
 
     
-    
-
     return (
         <div>
             <nav className="breadcrumb">
@@ -84,23 +93,27 @@ function EditCard() {
                     <label htmlFor="front">Front</label>
                     <textarea
                         id="front"
+                        name="front"
                         className="form-control"
                         rows="3"
-                        value={cardFront}
-                        onChange={(e) => setCardFront(e.target.value)}
+                        value={card.front}
+                        onChange={(e) => 
+                            setCardFront(...card.front, e.target.value)}
                         required
-                    >test</textarea>
+                    ></textarea>
                 </div>
                 <div className="form-group">
                     <label htmlFor="back">Back</label>
                     <textarea
                         id="back"
+                        name="back"
                         className="form-control"
                         rows="3"
-                        value={cardBack}
-                        onChange={(e) => setCardBack(e.target.value)}
+                        value={card.back}
+                        onChange={(e) => 
+                            setCardBack(e.target.value)}
                         required
-                        placeholder={card.back}
+                        
                     ></textarea>
                 </div>
                 <button type="button" className="btn btn-secondary mr-2" onClick={() => navigate(`/decks/${deckId}/`)}>
