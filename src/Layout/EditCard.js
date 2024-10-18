@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { createCard, readDeck } from "../utils/api";
+import { readCard, readDeck, updateCard } from "../utils/api";
 import { useNavigate, Link, useParams } from "react-router-dom";
 
-function CreateCard() {
+function EditCard() {
     // Retrieved deckId from URL parameters to associate the new card correctly.
-    const { deckId } = useParams();
+    const { deckId, cardId } = useParams();
     const [deck, setDeck] = useState(null);
+    const [card, setCard] = useState(null);
     // Renamed state variables to cardFront and cardBack to match the form inputs.
     const [cardFront, setCardFront] = useState("");
     const [cardBack, setCardBack] = useState("");
@@ -26,40 +27,56 @@ function CreateCard() {
 
         fetchDeck();
 
+        const fetchCard = async () => {
+            try { 
+                const fetchedCard = await readCard(cardId, signal);
+                setCard(fetchedCard);
+            } catch (error) {
+                console.error("Failed to fetch the card:", error);
+
+            } 
+        ;}
+        
+        fetchCard();
+        
         return () => abortController.abort();
-    }, [deckId]);
+    }, [deckId, cardId]);
+
+
+    if (!deck || !card) {
+        return <p>Loading...</p>;
+    }
 
     // Corrected navigation path after creating a card
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const newCard = {
+        const updatedCard = {
             front: cardFront,
             back: cardBack,
             deckId: Number(deckId)
         };
 
         try {
-            await createCard(deckId, newCard);
+            await updateCard(updatedCard);
             setCardFront("");
             setCardBack("");
         } catch (error) {
-            console.error("Failed to create card:", error);
+            console.error("Failed to update card:", error);
         }
     };
 
-    if (!deck) {
-        return <p>Loading...</p>;
-    }
+    
+    
 
     return (
         <div>
             <nav className="breadcrumb">
                 <Link to="/">Home</Link>
-                {` / ${deck.name} / Add Card`}
+                {` / Deck ${deck.name} / Edit Card`}
             </nav>
 
-            <h2>{`${deck.name}: Add Card`}</h2>
+            <h2>Edit Card</h2>
 
         {/*Updated form fields to use cardFront and cardBack*/}
             <form onSubmit={handleSubmit}>
@@ -72,7 +89,7 @@ function CreateCard() {
                         value={cardFront}
                         onChange={(e) => setCardFront(e.target.value)}
                         required
-                    ></textarea>
+                    >test</textarea>
                 </div>
                 <div className="form-group">
                     <label htmlFor="back">Back</label>
@@ -83,17 +100,19 @@ function CreateCard() {
                         value={cardBack}
                         onChange={(e) => setCardBack(e.target.value)}
                         required
+                        placeholder={card.back}
                     ></textarea>
                 </div>
-                <button type="button" className="btn btn-secondary mr-2" onClick={() => navigate(`/decks/${deckId}`)}>
-                    Done
+                <button type="button" className="btn btn-secondary mr-2" onClick={() => navigate(`/decks/${deckId}/`)}>
+                    Cacel
                 </button>
                 <button type="submit" className="btn btn-primary">
-                    Save
+                    Submit
                 </button>
             </form>
         </div>
     );
 }
 
-export default CreateCard;
+
+export default EditCard;

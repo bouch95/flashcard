@@ -47,10 +47,10 @@ function CreateDeck() {
                         required
                     />
                 </div>
-                <button type="button" onClick={() => {navigate("/")}}>
+                <button className="btn btn-primary" type="button" onClick={() => {navigate("/")}}>
                     Cancel
                 </button>
-                <button type="submit">Submit</button>
+                <button className="btn btn-primary m-4" type="submit">Submit</button>
             </form>
         </div>
     );

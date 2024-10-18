@@ -7,8 +7,11 @@ function StudyDeckCards() {
     
     // Extracting deckId from URL parameters
     const { deckId } = useParams();
-    const [ selectedDeck, setSelectedDeck ] = useState(null);
-        
+    const [selectedDeck, setSelectedDeck] = useState(null);
+    const [currentCardIndex, setCurrentCardIndex] = useState(0);   
+    const [isFlipped, setIsFlipped] = useState(false); 
+    const navigate = useNavigate();
+    
     // Fetch decks on component mount
     useEffect(() => {
         // Creating an AbortController to cancel fetch requests if component unmounts
@@ -41,8 +44,8 @@ function StudyDeckCards() {
     
     console.log(selectedDeck);
     
-    // If the deck has fewer than 2 cards, prompt the user to add more
-    if (cards.length < 4) {
+    // If the deck has at least 3 cards, prompt the user to add more
+    if (cards.length < 3) {
         console.log("number of cards = ", cards.length);
     
     return (
@@ -63,36 +66,69 @@ function StudyDeckCards() {
                 <p>{`There are ${cards.length} cards in this deck.`}</p>
             
                 {/* Button to navigate to add new cards */}
-                <Link to={`/decks/${deckId}/cards/new`}>
-                    <button type="button" className="btn btn-secondary border">
+                <hr />
+                    <Link to={`/decks/${deckId}/cards/new`} className="btn btn-primary">
                         Add Cards
-                    </button>
-                </Link>
+                    </Link>
+
             </div>
         </div>
     );
-} else {
-    let i = 1;
+    }
+    const currentCard = cards[currentCardIndex];
+
+    // Flip handler
+    const handleFlip = () => {
+        setIsFlipped(!isFlipped);
+    };
+
+    const handleNext = () => {
+        if (currentCardIndex + 1 < cards.length) {
+            setCurrentCardIndex(currentCardIndex + 1);
+            setIsFlipped(false);
+        } else {
+            const restart = window.confirm(
+                "Restart cards?\n\nClick 'cancel' to return to the home page."
+            );
+            if (restart) {
+                setCurrentCardIndex(0);
+                setIsFlipped(false);
+            } else {
+                navigate("/");
+            }
+        }
+    };
+
     return (
         <div>
-            <nav className="breadcrumb"><Link to="/">Home</Link>{` / ${selectedDeck.name} / Study`}</nav>
+            <nav className="breadcrumb">
+                <Link to="/">Home</Link>
+                {` / ${selectedDeck.name} / Study`}
+            </nav>
+
             <h2>{`${selectedDeck.name}: Study`}</h2>
-                {cards.map((card) => (
-                    <div className="deck p-4 border">
-                    <h3>{`Card ${i++} of ${cards.length}`}</h3>
-                    <p>{card.front}</p>
-                    <button type="button" className="btn btn-secondary border" 
-                        onClick={() => 
-                            <p>{card.back}</p>
-                        }>
+
+           {/*Updated return statement with conditional rendering*/}
+            <div className="card">
+                <div className="card-body">
+                    <h5 className="card-title">
+                        Card {currentCardIndex + 1} of {cards.length}
+                    </h5>
+                    <p className="card-text">
+                        {isFlipped ? currentCard.back : currentCard.front}
+                    </p>
+                    <button className="btn btn-secondary mr-2" onClick={handleFlip}>
                         Flip
-                    </button>    
-                    </div>
-                ))}
+                    </button>
+                    {isFlipped && (
+                        <button className="btn btn-primary" onClick={handleNext}>
+                            Next
+                        </button>
+                    )}
+                </div>
+            </div>
         </div>
     );
-
-    }
 }
-
+   
 export default StudyDeckCards;
