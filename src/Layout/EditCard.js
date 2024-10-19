@@ -7,11 +7,8 @@ function EditCard() {
     const { deckId, cardId } = useParams();
     const [deck, setDeck] = useState(null);
     const [card, setCard] = useState(null);
-    // Renamed state variables to cardFront and cardBack to match the form inputs.
-    const [cardFront, setCardFront] = useState("");
-    const [cardBack, setCardBack] = useState("");
+       
     const navigate = useNavigate();
-
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -32,8 +29,6 @@ function EditCard() {
             try { 
                 const fetchedCard = await readCard(cardId, signal);
                 setCard(fetchedCard);
-                //setCardFront(card.front);
-                //console.log(cardFront);
             } catch (error) {
                 console.error("Failed to fetch the card:", error);
             } 
@@ -44,40 +39,36 @@ function EditCard() {
         return () => abortController.abort();
     }, [deckId, cardId]);
 
-
     if (!deck || !card) {
         return <p>Loading...</p>;
     }
-        //console.log(cardFront, "test");
-        //console.log(card.front);
-        //setCardFront(card.front);
-        
     
     // Corrected navigation path after creating a card
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
-        
-        
+          
         const updatedCard = {
-            
             id: Number(cardId),
-            front: cardFront,
-            back: cardBack,
+            front: card.front,
+            back: card.back,
             deckId: Number(deckId)
         };
-            console.log(updatedCard);
+        
         try {
             await updateCard(updatedCard);
-            //setCardFront(card.front);
-            //setCardBack("");
         } catch (error) {
             console.error("Failed to update card:", error);
         }
         navigate(`/decks/${deckId}`);
     };
 
-    
+    function changeHandler({target: {name, value}}) {
+        setCard((previousState) => ({
+            ...previousState,
+            [name]: value, 
+        }))
+    }
+
     return (
         <div>
             <nav className="breadcrumb">
@@ -97,8 +88,7 @@ function EditCard() {
                         className="form-control"
                         rows="3"
                         value={card.front}
-                        onChange={(e) => 
-                            setCardFront(...card.front, e.target.value)}
+                        onChange={changeHandler}
                         required
                     ></textarea>
                 </div>
@@ -110,14 +100,12 @@ function EditCard() {
                         className="form-control"
                         rows="3"
                         value={card.back}
-                        onChange={(e) => 
-                            setCardBack(e.target.value)}
+                        onChange={changeHandler}
                         required
-                        
                     ></textarea>
                 </div>
                 <button type="button" className="btn btn-secondary mr-2" onClick={() => navigate(`/decks/${deckId}/`)}>
-                    Cacel
+                    Cancel
                 </button>
                 <button type="submit" className="btn btn-primary">
                     Submit
@@ -126,6 +114,5 @@ function EditCard() {
         </div>
     );
 }
-
 
 export default EditCard;

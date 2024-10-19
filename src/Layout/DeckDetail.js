@@ -65,24 +65,24 @@ function DeckDetail() {
             ) : (
                 <ul>
                     {deck.cards.map((card) => (
-                        <div className="border">
-                        <div className="row " key={card.id}>
-                            <p className="m-4">{card.front}</p>
-                            <p className="m-4">{card.back}</p>
+                        <div className="border" key={card.id}>
+                            <div className="row " >
+                                <p className="m-4">{card.front}</p>
+                                <p className="m-4">{card.back}</p>
                             </div>
-                        <div>
-                            <Link to={`/decks/${deck.id}/cards/${card.id}/edit`}>
-                                <button className="btn btn-primary m-2 border" type="button">Edit</button>
-                            </Link>
-                            <Link>
-                                <button className="btn btn-primary m-2 border" type="button" onClick={() => 
+                            <div>
+                                <Link to={`/decks/${deck.id}/cards/${card.id}/edit`}>
+                                    <button className="btn btn-primary m-2 border" type="button">Edit</button>
+                                </Link>
+                                <Link>
+                                    <button className="btn btn-primary m-2 border" type="button" onClick={() => 
                                     {if (window.confirm("Delete this card?\n\nYou will not be able to recover it.")) {
-                            deleteCard(card.id);
-                            navigate(`/decks/${deck.id}`);
-                        } else navigate(`/decks/${deck.id}`);
-                        }
-                    }>Delete</button>
-                </Link>
+                                        deleteCard(card.id);
+                                        navigate(`/decks/${deck.id}`);
+                                    } else navigate(`/decks/${deck.id}`);
+                                    }
+                                    }>Delete</button>
+                                </Link>
                             </div>
                         
                         </div>
