@@ -30,8 +30,7 @@ function StudyDeckCards() {
 
         fetchDecks();
         
-        console.log(selectedDeck);
-        
+              
         // Cleanup function to abort fetch on component unmount
         return () => abortController.abort();
     }, [deckId]); // Effect runs everytime 'deckId' changes    
@@ -42,7 +41,7 @@ function StudyDeckCards() {
 
     const { cards } = selectedDeck;
     
-    console.log(selectedDeck);
+    //console.log(selectedDeck);
     
     // If the deck has at least 3 cards, prompt the user to add more
     if (cards.length < 3) {
@@ -85,7 +84,7 @@ function StudyDeckCards() {
     const handleNext = () => {
         if (currentCardIndex + 1 < cards.length) {
             setCurrentCardIndex(currentCardIndex + 1);
-            setIsFlipped(false);
+            setIsFlipped(true);
         } else {
             const restart = window.confirm(
                 "Restart cards?\n\nClick 'cancel' to return to the home page."
@@ -120,11 +119,12 @@ function StudyDeckCards() {
                     <button className="btn btn-secondary mr-2" onClick={handleFlip}>
                         Flip
                     </button>
-                    {isFlipped && (
+                    {isFlipped ? 
+                        
                         <button className="btn btn-primary" onClick={handleNext}>
                             Next
                         </button>
-                    )}
+                    : isFlipped}
                 </div>
             </div>
         </div>

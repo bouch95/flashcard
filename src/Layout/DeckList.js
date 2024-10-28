@@ -29,7 +29,7 @@ function DeckList() {
     
     // Handler to navigate to the Create Deck page
     const handleCreateDeck = () => {
-        navigate("/decks/new");
+        navigate("/decks/:deckId/new");
     };
 
     

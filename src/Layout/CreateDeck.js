@@ -27,25 +27,29 @@ function CreateDeck() {
         <div>
             <nav className="breadcrumb"><Link to="/">Home </Link>/ Create Deck</nav>
             <h2>Create Deck</h2>
+            
             <form onSubmit={handleSubmit}>
-                <div>
+                <div className="form-group">
                     <label htmlFor="deckName">Name</label>
-                    <input
+                    <textarea
                         id="deckName"
-                        type="text"
+                        className="form-control"
+                        rows="3"
                         value={deckName}
                         onChange={(e) => setDeckName(e.target.value)}
                         required
-                    />
+                    ></textarea>
                 </div>
-                <div>
+                <div className="form-group">
                     <label htmlFor="deckDescription">Description</label>
                     <textarea
                         id="deckDescription"
+                        className="form-control"
+                        rows="3"
                         value={deckDescription}
                         onChange={(e) => setDeckDescription(e.target.value)}
                         required
-                    />
+                    ></textarea>
                 </div>
                 <button className="btn btn-primary" type="button" onClick={() => {navigate("/")}}>
                     Cancel

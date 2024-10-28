@@ -7,6 +7,7 @@ function CreateCard() {
     const { deckId } = useParams();
     const [deck, setDeck] = useState(null);
     // Renamed state variables to cardFront and cardBack to match the form inputs.
+    
     const [cardFront, setCardFront] = useState("");
     const [cardBack, setCardBack] = useState("");
     const navigate = useNavigate();
@@ -25,7 +26,8 @@ function CreateCard() {
         };
 
         fetchDeck();
-
+            
+        
         return () => abortController.abort();
     }, [deckId]);
 

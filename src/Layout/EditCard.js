@@ -56,6 +56,7 @@ function EditCard() {
         
         try {
             await updateCard(updatedCard);
+            console.log(updatedCard);
         } catch (error) {
             console.error("Failed to update card:", error);
         }
