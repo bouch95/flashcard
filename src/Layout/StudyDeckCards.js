@@ -50,10 +50,15 @@ function StudyDeckCards() {
     return (
         <div>
             {/* Breadcrumb navigation */}
-            <nav className="breadcrumb">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
                 <Link to="/">Home</Link>
-                {` / ${selectedDeck.name} / Study`}
-            </nav>
+              </li>
+              <li className="breadcrumb-item">
+                <Link to={`/decks/${selectedDeck.id}`}>{selectedDeck.name}</Link>
+              </li>
+              <li className="breadcrumb-item active">Add Card</li>
+          </ol>
 
             {/* Deck name as heading */}
             <h2>{`${selectedDeck.name}: Study`}</h2>
@@ -100,10 +105,15 @@ function StudyDeckCards() {
 
     return (
         <div>
-            <nav className="breadcrumb">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
                 <Link to="/">Home</Link>
-                {` / ${selectedDeck.name} / Study`}
-            </nav>
+              </li>
+              <li className="breadcrumb-item">
+                <Link to={`/decks/${selectedDeck.id}`}>{selectedDeck.name}</Link>
+              </li>
+              <li className="breadcrumb-item active">Add Card</li>
+          </ol>
 
             <h2>{`${selectedDeck.name}: Study`}</h2>
 
